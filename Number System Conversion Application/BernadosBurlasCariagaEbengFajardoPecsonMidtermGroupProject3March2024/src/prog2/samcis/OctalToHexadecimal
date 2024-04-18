@@ -1,0 +1,30 @@
+/**
+ * This method converts a Octal number to a hexadecimal representation
+ *
+ * @param octal Octal number to Hexadecimal number
+ * @return The octal equivalent of hexadecimal number
+ * @author Charles Lohan V. Pecson
+ */
+public class OctToHex {
+    public static void OctalToHex(int oct){// convert the octal to decimal
+        int dec = 0, i = 0;
+        while (oct != 0) {
+            dec = dec + (oct % 10) * (int) Math.pow(8, i);
+            i++;
+            oct = oct / 10;
+        }
+        String hex = hexadecimal(dec);// print the hexadecimal representation
+        System.out.println(hex);
+    }
+    static String hexadecimal(int q){//convert the decimal to octal
+        char[] a = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        int rem;
+        String hexdec = "";
+        while (q != 0) {
+            rem = q % 16;
+            hexdec = a[rem] + hexdec;
+            q = q / 16;}
+        return hexdec;
+    }
+
+}
