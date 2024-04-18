@@ -9,36 +9,42 @@
 public String binaryToHexadecimal(String binary) {
     // Define an array to store hexadecimal digits
     String[] hex = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
-
+   
     // Initializes an empty string to store the result
     String result = "";
 
-    /*Adds 0s in front of an incomplete 4-bit chunk so that each chunk can be divisible by 4. For example, a binary input of "101010" would be separated into
-    10 1010, but since the first two digits of "101010" are incomplete, 0s would be added in front of it to make it a 4-bit chunk to ensure that it can be converted
-    into a hexadecimal.
-    (i.e 101010 -> 10 1010 -> 0010 1010)
-    (i.e 1111111  -> 111 1111 -> 0111 1111)  
-    */
-    while (binary.length() % 4 != 0) {
-        binary = "0" + binary; 
-    }
+     // Splitting binary into integer and fractional parts, if present
+    String[] parts = binary.split("\\.");
 
-    /* Convert each 4-bit chunk from a binary string to its hexadecimal equivalent.It converts each 4-bit chunk of the binary string into decimal first, 
-    before getting its hexadecimal equivalent on the hex array above. 
-    */
-    
-    for (int i = 0; i < binary.length(); i += 4) {
-        // Extract a 4-bit chunk from the binary string
-        String chunk = binary.substring(i, i + 4);
-        
-        // Convert the 4-bit binary chunk to decimal integer
+    // Convert integer part to hexadecimal
+    String integerPart = parts[0];
+    // Pad integer part with leading zeros to make its length a multiple of 4
+    while (integerPart.length() % 4 != 0) {
+        integerPart = "0" + integerPart;
+    }
+    // Convert each 4-bit chunk of the integer part to hexadecimal
+    for (int i = 0; i < integerPart.length(); i += 4) {
+        String chunk = integerPart.substring(i, i + 4);
         int decimal = Integer.parseInt(chunk, 2);
-        
-        // Append the corresponding hexadecimal digit to the result string
         result += hex[decimal];
     }
 
-    // Return the final hexadecimal representation
+    // If there's a fractional part, convert it as well
+    if (parts.length > 1) {
+        result += ".";
+        String fractionalPart = parts[1];
+        // Pad fractional part with trailing zeros to make its length a multiple of 4
+        while (fractionalPart.length() % 4 != 0) {
+            fractionalPart += "0";
+        }
+        // Convert each 4-bit chunk of the fractional part to hexadecimal
+        for (int i = 0; i < fractionalPart.length(); i += 4) {
+            String chunk = fractionalPart.substring(i, i + 4);
+            int decimal = Integer.parseInt(chunk, 2);
+            result += hex[decimal];
+        }
+    }
+
     return result;
 }
 
@@ -53,12 +59,17 @@ public String hexadecimalToBinary(String hex) {
     // Create a mapping of hexadecimal characters to their decimal values
     String hexChars = "0123456789ABCDEF";
 
-    // Initialize the result as a StringBuilder 
-    StringBuilder result = new StringBuilder();
+    // Initialize the result for both integer and fractional parts
+    StringBuilder integerResult = new StringBuilder();
+    StringBuilder fractionalResult = new StringBuilder();
 
-    // Convert each character of the hexadecimal string
-    for (char c : hex.toCharArray()) {
-        // Convert the character to uppercase so that even if the inputed hexadecimal is in lowercase, it would be recognized properly.
+    // Splitting hexadecimal into integer and fractional parts, if present
+    String[] parts = hex.split("\\.");
+
+    // Convert integer part to binary
+    String integerPart = parts[0];
+    for (char c : integerPart.toCharArray()) {
+        // Convert the character to uppercase so that even if the input hexadecimal is in lowercase, it would be recognized properly.
         char upperC = Character.toUpperCase(c);
 
         // Find the decimal value of the character by searching in the hexadecimal character mapping
@@ -72,13 +83,39 @@ public String hexadecimalToBinary(String hex) {
             binaryChunk = "0" + binaryChunk; // Adding leading zeros
         }
 
-        // Append the binary chunk to the result
-        result.append(binaryChunk);
+        // Append the binary chunk to the integer result
+        integerResult.append(binaryChunk);
     }
 
-    // Return the complete binary representation
-    return result.toString();
-}
+    // If there's a fractional part, convert it as well
+    if (parts.length > 1) {
+        String fractionalPart = parts[1];
+        for (char c : fractionalPart.toCharArray()) {
+            // Convert the character to uppercase so that even if the input hexadecimal is in lowercase, it would be recognized properly.
+            char upperC = Character.toUpperCase(c);
 
+            // Find the decimal value of the character by searching in the hexadecimal character mapping
+            int decimalValue = hexChars.indexOf(upperC);
+
+            // Convert the decimal value to a 4-bit binary chunk
+            String binaryChunk = Integer.toBinaryString(decimalValue);
+
+            // Pad the binary chunk with leading zeros to ensure it has exactly 4 bits
+            while (binaryChunk.length() < 4) {
+                binaryChunk = "0" + binaryChunk; // Adding leading zeros
+            }
+
+            // Append the binary chunk to the fractional result
+            fractionalResult.append(binaryChunk);
+        }
+    }
+
+    // Combine integer and fractional parts with a dot in between, if there's a fractional part
+    if (fractionalResult.length() > 0) {
+        return integerResult.toString() + "." + fractionalResult.toString();
+    } else {
+        return integerResult.toString();
+    }
+}
 
 
