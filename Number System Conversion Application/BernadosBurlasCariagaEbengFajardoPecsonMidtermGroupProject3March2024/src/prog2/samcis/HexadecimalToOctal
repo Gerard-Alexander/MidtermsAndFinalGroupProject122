@@ -1,0 +1,30 @@
+/**
+ * This method converts a hexadecimal number to its Octal representation.
+ *
+ * @param hexadecimal Hexadecimal number to Octal number
+ * @return The hexadecimal equivalent of octal number
+ * @author Charles Lohan V. Pecson
+ */
+public class HexToOct {
+    public static void HexToOctal(int hex){
+
+        long decimal = hexToDecimal(hex);
+        String octal = decimalToOctal(decimal);
+
+        System.out.println("Octal number is: " + octal);
+    }
+
+    static long hexToDecimal(String hex) {//Convert the Hexadecimal to Decimal
+        return Long.parseLong(hex, 16);
+    }
+
+    static String decimalToOctal(long decimal) {//Convert the Decimal to Octal
+        StringBuilder octal = new StringBuilder();
+        while (decimal != 0) {
+            long remainder = decimal % 8;
+            octal.insert(0, remainder);
+            decimal /= 8;
+        }
+        return octal.toString();
+    }
+}
