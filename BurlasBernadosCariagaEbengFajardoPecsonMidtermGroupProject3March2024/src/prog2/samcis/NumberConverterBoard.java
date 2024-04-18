@@ -61,15 +61,15 @@ public class NumberConverterBoard extends JFrame {
 
         binaryTA = new JTextArea(5, 20);
         binaryTA.setFont(new Font("Arial", Font.BOLD, 20));
-        binaryTA.setEditable(false);
+        binaryTA.setEditable(true);
 
         octalTA = new JTextArea(5, 20);
         octalTA.setFont(new Font("Arial", Font.BOLD, 20));
-        octalTA.setEditable(false);
+        octalTA.setEditable(true);
 
         hexadecimalTA = new JTextArea(5, 20);
         hexadecimalTA.setFont(new Font("Arial", Font.BOLD, 20));
-        hexadecimalTA.setEditable(false);
+        hexadecimalTA.setEditable(true);
 
         panel.setLayout(new GridLayout(4, 2));
         panel.add(decimalLabel);
@@ -94,31 +94,28 @@ public class NumberConverterBoard extends JFrame {
             }
             if (e.getSource() == convertButton) {
                 try {
-                    if (decimalTF.getText().equals("")) {
-                        throw new Exception("No specified decimal number.");
-                    } else {
-                        double decimalNumber = Double.parseDouble(decimalTF.getText());
-                        int integerPart = (int) decimalNumber;
-                        double fractionalPart = decimalNumber - integerPart;
-                        EquivalentNumbers number = new EquivalentNumbers();
-                        number.setDecimalNumber(integerPart);
+                    EquivalentNumbers number = new EquivalentNumbers();
 
-                        String binaryString = number.getBinaryString();
-                        String octalString = number.getOctalString();
-                        String hexadecimalString = number.getHexadecimalString();
-
-                        // Add fractional part to binary representation
-                        if (fractionalPart != 0) {
-                            String fractionalBinary = convertFractionToBinary(fractionalPart);
-                            binaryString += "." + fractionalBinary;
-                        }
-
-                        // Convert hexadecimal letters to uppercase
-                        hexadecimalString = hexadecimalString.toUpperCase();
-
-                        binaryTA.setText(binaryString);
-                        octalTA.setText(octalString);
-                        hexadecimalTA.setText(hexadecimalString);
+                    if (!decimalTF.getText().isEmpty()) {
+                        number.setDecimalNumber(Double.parseDouble(decimalTF.getText()));
+                        binaryTA.setText(number.getBinaryString());
+                        octalTA.setText(number.getOctalString());
+                        hexadecimalTA.setText(number.getHexadecimalString().toUpperCase());
+                    } else if (!binaryTA.getText().isEmpty()) {
+                        number.setBinaryString(binaryTA.getText());
+                        decimalTF.setText(String.valueOf(number.getDecimalNumber()));
+                        octalTA.setText(number.getOctalString());
+                        hexadecimalTA.setText(number.getHexadecimalString().toUpperCase());
+                    } else if (!octalTA.getText().isEmpty()) {
+                        number.setOctalString(octalTA.getText());
+                        decimalTF.setText(String.valueOf(number.getDecimalNumber()));
+                        binaryTA.setText(number.getBinaryString());
+                        hexadecimalTA.setText(number.getHexadecimalString().toUpperCase());
+                    } else if (!hexadecimalTA.getText().isEmpty()) {
+                        number.setHexadecimalString(hexadecimalTA.getText());
+                        decimalTF.setText(String.valueOf(number.getDecimalNumber()));
+                        binaryTA.setText(number.getBinaryString());
+                        octalTA.setText(number.getOctalString());
                     }
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(NumberConverterBoard.this, "One of the numbers does not follow the format of a number.", "Error", JOptionPane.ERROR_MESSAGE);
