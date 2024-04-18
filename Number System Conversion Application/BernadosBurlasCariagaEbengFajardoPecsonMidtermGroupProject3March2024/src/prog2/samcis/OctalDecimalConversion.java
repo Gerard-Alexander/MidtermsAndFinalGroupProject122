@@ -90,9 +90,9 @@ public class OctalDecimalConversion {
     public static double octalToDecimal(String o) throws NumberFormatException {
         /*
         Checks if each character of the given string, ignoring its
-        sign and/or decimal point if present, to ensure it is a
-        valid octal number. If any character is not a valid octal
-        digit, it throws a NumberFormatException.
+        sign and/or decimal point if present, is a valid octal digit. 
+        If any character is not a valid octal digit, it throws a 
+        NumberFormatException.
          */
         for (char c : String.valueOf(Math.abs(
                 Double.parseDouble(o))).replace(".", "").toCharArray()) {
