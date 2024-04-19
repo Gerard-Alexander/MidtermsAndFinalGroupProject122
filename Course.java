@@ -10,7 +10,7 @@ class Course {
     private double grade;
     
     public Course(){
-    courseNumber = "0";
+    courseNumber = "CS000";
     descriptiveTitle = "Course";
     units = 0;
     term = "1st Semester";
