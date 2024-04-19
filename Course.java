@@ -74,5 +74,10 @@ class Course {
     public void setGrade (double Grade){
         grade = Grade;
     }
+
+    public String toString(){
+        return System.out.print(courseNumber+", "+descriptiveTitle+", "+units+", "+grade+", "+yearLevel+", "+term)
+    }
+        
     
 }//end of Course class
